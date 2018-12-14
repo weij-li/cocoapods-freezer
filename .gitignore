@@ -1,3 +1,6 @@
 .DS_Store
 pkg
 .idea/
+demo/
+*.gem
+*.sh

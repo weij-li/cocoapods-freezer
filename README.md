@@ -1,6 +1,6 @@
 # cocoapods-freezer
 
-A description of cocoapods-freezer.
+cocoapods-freezer is a plugin of cocoapods. It uses for cache of intergation!
 
 ## Installation
 
@@ -8,4 +8,15 @@ A description of cocoapods-freezer.
 
 ## Usage
 
-    $ pod spec freezer POD_NAME
+Configurate such as example, then call 'pod install'.
+	
+``` ruby
+#use_freezer!
+
+target 'Demo' do
+  pod 'AFNetworking'
+end
+
+```
+
+Appreciate a 🌟 if you like it. 

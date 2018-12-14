@@ -17,28 +17,30 @@ module Pod
     # @todo Create a PR to add your plugin to CocoaPods/cocoapods.org
     #       in the `plugins.json` file, once your plugin is released.
     #
-    class Freezer < Command
-      self.summary = 'Short description of cocoapods-freezer.'
 
-      self.description = <<-DESC
-        Longer description of cocoapods-freezer.
-      DESC
+    # todo(ca1md0wn)
+    # class Freeze < Command
+    #   self.summary = 'Short description of cocoapods-freezer.'
 
-      self.arguments = 'NAME'
+    #   self.description = <<-DESC
+    #     Longer description of cocoapods-freezer.
+    #   DESC
 
-      def initialize(argv)
-        @name = argv.shift_argument
-        super
-      end
+    #   self.arguments = 'NAME'
 
-      def validate!
-        super
-        help! 'A Pod name is required.' unless @name
-      end
+    #   def initialize(argv)
+    #     @name = argv.shift_argument
+    #     super
+    #   end
 
-      def run
-        UI.puts "Add your implementation for the cocoapods-freezer plugin in #{__FILE__}"
-      end
-    end
+    #   def validate!
+    #     super
+    #     help! 'A Pod name is required.' unless @name
+    #   end
+
+    #   def run
+    #     UI.puts "Add your implementation for the cocoapods-freezer plugin in #{__FILE__}"
+    #   end
+    # end
   end
 end
