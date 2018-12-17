@@ -18,6 +18,7 @@ module Pod
 		module DSL
 			def use_freezer!(options=nil)
 				@use_freezer = true
+				@freezer_all = true
 
 				if !options || !options[:options]
 					return
@@ -26,7 +27,6 @@ module Pod
 				options_hash = options[:options]
 
 				@freezer_all = options_hash[:all]
-				#@freezer_path =  options_hash[:path]
 			end
 		end
 	end

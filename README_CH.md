@@ -13,9 +13,10 @@ cocoapods-freezer是一款基于CocoaPods的集成缓存插件。
 ``` ruby
 #use_framework! 目前插件不支持Framework构建
 
-use_freezer! :options => {
-	:all => true #or false (default is false)
-}
+use_freezer!
+# use_freezer! :options => {
+#	:all => true #or false (default is true)
+# }
 
 target 'Demo' do
   pod 'AFNetworking'
