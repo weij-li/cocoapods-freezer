@@ -96,11 +96,11 @@ module Pod
       end.map do |file|
         real_file = file
         if file.extname && file.extname.length > 0
-	        real_file = real_file.sub_ext(".h")
+	        real_file = real_file.sub_ext(".{h,hpp}")
         elsif file.to_s.end_with?('*')
-          real_file = real_file.sub_ext(".h")
+          real_file = real_file.sub_ext(".{h,hpp}")
         else # 'file' may be a folder!
-          real_file = (real_file + "*").sub_ext(".h")
+          real_file = (real_file + "*").sub_ext(".{h,hpp}")
         end
 
         real_file
