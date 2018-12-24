@@ -1,7 +1,6 @@
 require 'cocoapods-freezer/freezer'
 require 'cocoapods-freezer/dir'
 require 'cocoapods-freezer/config'
-require 'cocoapods-freezer/podfile'
 require 'cocoapods-freezer/installer'
 require 'cocoapods-freezer/xcodebuild'
 require 'cocoapods-freezer/lipo'

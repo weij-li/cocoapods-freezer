@@ -10,15 +10,11 @@ module Pod
       raise unless podfile
       @podfile = podfile
       @frozen_pods = [] 
-      @manunal_enable = true
-    end
-
-    def enable(manunal_enable)
-      @manunal_enable = manunal_enable
+      @enable = false
     end
 
     def enable?
-      @manunal_enable && @podfile.use_freezer?
+      @enable
     end
 
     def exist?
@@ -32,6 +28,8 @@ module Pod
     # freeze!
     # todo(ca1md0wn): if Dir of FrozenPods destoryed, should fix by itself!
 		def freeze!
+      @enable = true
+
       Pod::UI.puts "Freezing Pods".green
 
       unchange_spec_names = []
@@ -54,10 +52,7 @@ module Pod
       installer.install!
 
       specs_for_freezing = installer.major_specs
-      if !@podfile.freezer_all?
-        specs_for_freezing.clear
-      end
-
+      
       # freeze!
 			specs_for_freezing.each do |spec|
 
@@ -232,7 +227,7 @@ module Pod
     @frozen_pods
 
 		def root
-			@podfile.freezer_path || (Pathname.new(@podfile.defined_in_file.dirname) + 'FrozenPods')
+			Pathname.new(@podfile.defined_in_file.dirname) + 'FrozenPods'
 		end
 
     def manifest_path
