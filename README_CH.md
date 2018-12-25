@@ -4,38 +4,24 @@ cocoapods-freezer是一款基于CocoaPods的集成缓存插件。
 
 ## 安装
 
-    $ gem install cocoapods-freezer
+``` shell
+$ gem install cocoapods-freezer
+```
 
 ## 使用
-
-按如下配置，并触发'pod install'即可运行。
 	
-``` ruby
-#use_framework! 目前插件不支持Framework构建
-
-use_freezer!
-# use_freezer! :options => {
-#	:all => true #or false (default is true)
-# }
-
-target 'Demo' do
-  pod 'AFNetworking'
-end
+``` shell
+$ pod install --user-freezer
 
 ```
 
-## 背景
-
-目前基于cocoapods的工程每次进行编译时，由于集成的Pod版本不变性，继而源码不变性，导致出现不必要的重复编译时间。
-
 ## 原理
 
-首次启用freezer后，会在cocoapods集成前，对依赖的Pods进行预打包处理，并缓存产物。基于Pod的版本不变性，继而源码不变性，从而产物不变性（二进制数据）。后续集成编译将直接加载缓存产物，节省重复编译时间，提高速度。
+基于集成的Pod组件版本一般更新频率不高，其源码改动频率同样不高，因此这部分编译产物在一段时间内存在不变性，故通过对这其进行缓存，节省重复编译时间，最终达到提速效果。
 
 ## 能力
 
 [x] 基于Podfile进行Pods缓存分析，配合'Pod install'进行缓存
-[x] 支持配置”全部Pods启用、禁用Freezer功能“
 [x] 目前仅支持static-library预打包处理（需屏蔽'use_framework!'）
 [x] 目前仅支持release打包配置
 [x] 目前仅支持单iOS平台
@@ -46,7 +32,6 @@ end
 
 - 缓存相关
   [] 支持全平台（Platform）、全配置（Configuration）缓存
-	[] 支持单独Pod缓存定制
   [] 支持Framework(Dynamic\Static)方式构建
   [] 支持local类型
   [] 支持swift类型
