@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ['']
   spec.description   = %q{A short description of cocoapods-freezer.}
   spec.summary       = %q{A longer description of cocoapods-freezer.}
-  spec.homepage      = 'https://github.com/EXAMPLE/cocoapods-freezer'
+  spec.homepage      = 'https://github.com/ca1md0wn/cocoapods-freezer'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files`.split($/)
