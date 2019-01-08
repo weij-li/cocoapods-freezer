@@ -15,7 +15,7 @@ $ pod install --user-freezer
 
 ```
 
-## principle
+## Principle
 
 Versions of Pods maintain stability. And the same to the product of Pods. So cocoapods-freezer will cache the product when Pods pre-build. Then it use cache for integate.
 
