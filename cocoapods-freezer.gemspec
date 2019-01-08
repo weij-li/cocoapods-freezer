@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = CocoapodsFreezer::VERSION
   spec.authors       = ['ca1md0wn']
   spec.email         = ['studio.ca1md0wn@gmail.com']
-  spec.description   = %q{A short description of cocoapods-freezer.}
-  spec.summary       = %q{A longer description of cocoapods-freezer.}
+  spec.description   = %q{cocoapods-freezer is a plugin of cocoapods. It uses for cache of intergation!}
+  spec.summary       = %q{cocoapods-freezer is a plugin of cocoapods. It uses for cache of intergation!}
   spec.homepage      = 'https://github.com/ca1md0wn/cocoapods-freezer'
   spec.license       = 'MIT'
 
