@@ -30,7 +30,8 @@ $ pod install --user-freezer
 
 ## 计划
 
-- 缓存相关
+- 预编译相关
+	[] 支持多subspecs编译
   [] 支持全平台（Platform）、全配置（Configuration）缓存
   [] 支持Framework(Dynamic\Static)方式构建
   [] 支持local类型

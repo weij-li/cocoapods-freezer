@@ -48,7 +48,7 @@ module Pod
         attributes_hash[platform_name]["vendored_frameworks"] = vendors
       when :static_library then
       	attributes_hash[platform_name]["source_files"] = header_files_in_all_sources_files(platform_name)
-        vendors = Array.from_attributes(attributes_hash[platform_name]["vendored_frameworks"])
+        vendors = Array.from_attributes(attributes_hash[platform_name]["vendored_libraries"])
         vendors += [product_name]
         attributes_hash[platform_name]["vendored_libraries"] = vendors
       else

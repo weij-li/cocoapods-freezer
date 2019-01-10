@@ -20,7 +20,7 @@ module Pod
     end
 
     def resolve_dependencies_about_freezed
-      analysis_result.specifications.each do |spec|
+      major_specs.each do |spec|
         next unless Pod::Freezer.shared.freezed_pod?(spec.root.name)
 
         targets = pod_targets.select do |target|
@@ -76,12 +76,14 @@ module Pod
 
       # no hook when install by freezer
       if @use_by_freezer || !Pod::Freezer.shared.enable?
-        hook_resolve_dependecies.bind(self).()
+        analyzer = hook_resolve_dependecies.bind(self).()
       else
         clean_pods_about_freezed
-        hook_resolve_dependecies.bind(self).()
+        analyzer = hook_resolve_dependecies.bind(self).()
         resolve_dependencies_about_freezed
       end
+
+      analyzer
     end
 
     # hook install_source_of_pod

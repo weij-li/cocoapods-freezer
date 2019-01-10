@@ -56,45 +56,58 @@ module Pod
       # freeze!
 			specs_for_freezing.each do |spec|
 
+        # subspec not support;
+        if spec.subspecs.count > 0
+          Pod::UI.puts "`#{spec.name}` can't freeze because it has subspecs!".red
+          next
+        end
+
         # local not support; 
         if sandbox.local?(spec.name)
           Pod::UI.puts "`#{spec.name}` can't freeze because it is local!".red
           next 
         end
 
-				# fetch targets of pod in different platform, 
+				# fetch targets of pod by spec.name
 				pod_targets = installer.pod_targets.select do |target|
-					target.pod_name == spec.name
+					target.root_spec.name == spec.name
 				end || []
 
-        # multiplatform not support(just support ios now!)
-        # todo(ca1md0wn)
         unless pod_targets.count > 0
-          Pod::UI.puts "`#{spec.name}` can't freeze because it is multiplatforms!".red
+          Pod::UI.puts "`#{spec.name}` can't freeze because it nil!".red
           next
         end
 
-        # swift not support; 
-        # todo(ca1md0wn)
-        # build_as_framework not support;
-        # todo(ca1md0wn)
-        # should_not_build not support 
         not_support = false
         pod_targets.each do |target|
+          # todo(ca1md0wn)
+          # should_not_build not support 
           if !target.should_build?
             Pod::UI.puts "`#{spec.name}` can't freeze because it should not build!".red
             not_support = true
             break
           end
 
+          # todo(ca1md0wn)
+          # swift not support; 
           if target.uses_swift?
             Pod::UI.puts "`#{spec.name}` can't freeze because it use swift!".red
             not_support = true
             break
           end
 
+          # todo(ca1md0wn)
+          # build_as_framework not support;
           if target.requires_frameworks?
             Pod::UI.puts "`#{spec.name}` don't support to freeze because it will build as framework!".red
+            not_support = true
+            break
+          end
+
+          # todo(ca1md0wn)
+          # multiplatform not support(just support ios now!)
+          if target.platform.name != :ios
+            Pod::UI.puts "`#{spec.name}` don't support to freeze because it is not ios!".red
             not_support = true
             break
           end
