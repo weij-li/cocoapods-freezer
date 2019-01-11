@@ -20,39 +20,34 @@ module Pod
     end
 
     def resolve_dependencies_about_freezed
-      major_specs.each do |spec|
-        next unless Pod::Freezer.shared.freezed_pod?(spec.root.name)
+      major_specs.each do |major_spec|
+        next unless Pod::Freezer.shared.freezed_pod?(major_spec.name)
 
         targets = pod_targets.select do |target|
-          target.pod_name == spec.root.name
+          target.pod_name == major_spec.name
         end
 
-        if !targets || targets.count == 0
+        # Pod has only one target
+        unless targets.count == 1
           next
         end
 
-        targets.each do |target|
-          spec.prepare_to_store_freezed(target.platform.name.to_s)
-          if Pod::Freezer.shared.freezed_product?(target.product_name)
-            spec.store_freezed(target.platform.name.to_s, target.product_name, target.product_type)
-          else # not freezed product in platform
-            spec.store_freezed_none(target.platform.name.to_s)
-          end
-        end
+        target = targets.first
 
-        spec.done_for_store_freezed
+        # Pod maybe include multi subspecs, 
+        all_specs = analysis_result.specifications.select do |spec|
+          spec.root.name == major_spec.name
+        end.each do |spec|
+          spec.prepare_to_store_freezed(target.platform.name.to_s)
+          spec.store_freezed(target.platform.name.to_s, target.product_name, target.product_type)
+          spec.done_for_store_freezed
+        end
       end
     end
 
     def install_source_of_pod_about_freezed(pod_name)
       if Pod::Freezer.shared.freezed_pod?(pod_name)
-        pod_targets.select do |target|
-          target.pod_name == pod_name
-        end.map do |target|
-          target.product_name
-        end.each do |product_name|
-          Pod::Freezer.shared.export!(product_name, self.sandbox.pod_dir(pod_name) + product_name)
-        end
+        Pod::Freezer.shared.export!(pod_name, self.sandbox.pod_dir(pod_name))
       end
     end
 

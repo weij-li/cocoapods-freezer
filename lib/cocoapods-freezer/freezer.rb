@@ -56,12 +56,6 @@ module Pod
       # freeze!
 			specs_for_freezing.each do |spec|
 
-        # subspec not support;
-        if spec.subspecs.count > 0
-          Pod::UI.puts "`#{spec.name}` can't freeze because it has subspecs!".red
-          next
-        end
-
         # local not support; 
         if sandbox.local?(spec.name)
           Pod::UI.puts "`#{spec.name}` can't freeze because it is local!".red
@@ -73,92 +67,86 @@ module Pod
 					target.root_spec.name == spec.name
 				end || []
 
-        unless pod_targets.count > 0
-          Pod::UI.puts "`#{spec.name}` can't freeze because it nil!".red
+        # todo(ca1md0wn)
+        # Pod has only one target in one platform.
+        # 1. pod has multi target beacause of multi platforms in workspace!
+        # 2. pod has multi target beacause it define in diffenent targets with diffenent subspec!
+        unless pod_targets.count == 1
+          Pod::UI.puts "`#{spec.name}` can't freeze because it has multi targets in workspace!".red
           next
         end
 
-        not_support = false
-        pod_targets.each do |target|
-          # todo(ca1md0wn)
-          # should_not_build not support 
-          if !target.should_build?
-            Pod::UI.puts "`#{spec.name}` can't freeze because it should not build!".red
-            not_support = true
-            break
-          end
+        pod_target = pod_targets.first
 
-          # todo(ca1md0wn)
-          # swift not support; 
-          if target.uses_swift?
-            Pod::UI.puts "`#{spec.name}` can't freeze because it use swift!".red
-            not_support = true
-            break
-          end
-
-          # todo(ca1md0wn)
-          # build_as_framework not support;
-          if target.requires_frameworks?
-            Pod::UI.puts "`#{spec.name}` don't support to freeze because it will build as framework!".red
-            not_support = true
-            break
-          end
-
-          # todo(ca1md0wn)
-          # multiplatform not support(just support ios now!)
-          if target.platform.name != :ios
-            Pod::UI.puts "`#{spec.name}` don't support to freeze because it is not ios!".red
-            not_support = true
-            break
-          end
+        # target should not build; 
+        if !pod_target.should_build?
+          Pod::UI.puts "`#{spec.name}` can't freeze because it should not build!".red
+          next
         end
-        next if not_support
 
-        frozen_pod = FrozenPod.new(spec.name)
+        # todo(ca1md0wn)
+        # freezer not support swift; 
+        if pod_target.uses_swift?
+          Pod::UI.puts "`#{spec.name}` can't freeze because it use swift!".red
+          next
+        end
+
+        # todo(ca1md0wn)
+        # freezer not support to build as framework;
+        if pod_target.requires_frameworks?
+          Pod::UI.puts "`#{spec.name}` don't support to freeze because it will build as framework!".red
+          next
+        end
+
+        # todo(ca1md0wn)
+        # freezer just support to build at ios; (just support ios now!)
+        if pod_target.platform.name != :ios
+          Pod::UI.puts "`#{spec.name}` don't support to freeze because it is not ios!".red
+          next
+        end
 
         # setup!
-				pod_targets.each do |target|
-          # target build when
-          # 1.spec change/add 2.product not exist
-          if !unchange_spec_names.include?(spec.name) || !(root + target.product_name).exist?
-
-            product_path = nil
-            case target.platform.name
-            when :ios then
-              # build iphonesimulator!
-              iphonesimulator_paths = Pod::Xcodebuild::build_iphonesimulator!(installer.sandbox.project_path.realdirpath, target.name, target.product_name)
-              if !iphonesimulator_paths || iphonesimulator_paths.count == 0 
-                next
-              end
-
-              # build iphoneos!
-              iphoneos_paths = Pod::Xcodebuild::build_iphoneos!(installer.sandbox.project_path.realdirpath, target.name, target.product_name)
-              if !iphoneos_paths || iphoneos_paths.count == 0
-                next
-              end
-
-              # lipo!
-              product_path = Pod::Lipo::create!(iphoneos_paths + iphonesimulator_paths, target.product_name)
-
-            when :osx then 
-              # todo
-            when :watchos then
-              # todo
-            when :tvos then
-              # todo
+				# pod_target build when
+        # 1.spec change/add 2.product not exist
+        if !unchange_spec_names.include?(spec.name) || !(root + pod_target.product_name).exist?
+          product_path = nil
+          case pod_target.platform.name
+          when :ios then
+            # build iphonesimulator!
+            iphonesimulator_paths = Pod::Xcodebuild::build_iphonesimulator!(installer.sandbox.project_path.realdirpath, pod_target.name, pod_target.product_name)
+            if !iphonesimulator_paths || iphonesimulator_paths.count == 0 
+              Pod::UI.puts "`#{spec.name}` don't support to freeze because it build failed!".red
+              next
             end
 
-            next unless product_path
-            
-            FileUtils.cp_r(product_path, root + target.product_name, :remove_destination => true)
+            # build iphoneos!
+            iphoneos_paths = Pod::Xcodebuild::build_iphoneos!(installer.sandbox.project_path.realdirpath, pod_target.name, pod_target.product_name)
+            if !iphoneos_paths || iphoneos_paths.count == 0
+              Pod::UI.puts "`#{spec.name}` don't support to freeze because it build failed!".red
+              next
+            end
+
+            # lipo!
+            product_path = Pod::Lipo::create!(iphoneos_paths + iphonesimulator_paths, pod_target.product_name)
+
+          when :osx then 
+            # todo
+          when :watchos then
+            # todo
+          when :tvos then
+            # todo
           end
 
-          frozen_pod.mark!(target.product_name)
-				end
-
-        unless frozen_pod.empty?
-          @frozen_pods += [frozen_pod]
+          if !product_path
+            Pod::UI.puts "`#{spec.name}` don't support to freeze because it build failed!".red
+            next
+          end
+          
+          FileUtils.cp_r(product_path, root + pod_target.product_name, :remove_destination => true)
         end
+
+        frozen_pod = FrozenPod.new(pod_target.pod_name, pod_target.product_name)
+        @frozen_pods += [frozen_pod]
 
         Pod::UI.puts "`#{spec.name}` freeze!".green
 			end
@@ -189,54 +177,32 @@ module Pod
       return false
     end
 
-    def freezed_product?(product_name)
-      @frozen_pods.each do |frozen_pod|
-        frozen_pod.product_names.each do |name|
-          if name == product_name
-            return true
-          end
+    def export!(pod_name, path)
+      @frozen_pods.select do |frozen_pod|
+        if frozen_pod.pod_name == pod_name
+          FileUtils.cp_r(root + frozen_pod.product_name, path + frozen_pod.product_name, :remove_destination => true)
+          break;
         end
       end
-
-      return false
-    end
-
-    def export!(product_name, path)
-      if !path || !freezed_product?(product_name)
-        return
-      end
-
-      FileUtils.cp_r(root + product_name, path.to_s, :remove_destination => true)
     end
 
 		private
 
     class FrozenPod
-      # String
+      # [String]
       attr_reader :pod_name
 
-      # Array<String>
-      attr_reader :product_names
+      # [String]
+      attr_reader :product_name
 
-      def initialize(pod_name)
+      def initialize(pod_name, product_name)
+        raise "Params error" unless pod_name.length > 0 && product_name.length > 0
         @pod_name = pod_name
-        @product_names = []
-      end
-
-      def mark!(product_name)
-        @product_names += [product_name]
-      end
-
-      def empty?
-        if @product_names.count > 0
-          return false
-        end
-
-        return true
+        @product_name = product_name
       end
     end
     
-    # Array<FrozenPod>
+    # [Array<FrozenPod>]
     @frozen_pods
 
 		def root

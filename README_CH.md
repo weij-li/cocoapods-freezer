@@ -31,17 +31,17 @@ $ pod install --user-freezer
 ## 计划
 
 - 预编译相关
-	[] 支持多subspecs编译
-  [] 支持全平台（Platform）、全配置（Configuration）缓存
-  [] 支持Framework(Dynamic\Static)方式构建
-  [] 支持local类型
-  [] 支持swift类型
-	[] 缓存路径定制
-	[] 打包脚本定制？
-	[] Configuration定制？
+  - [] 支持全平台（Platform）、全配置（Configuration）缓存
+  - [] 支持Framework(Dynamic\Static)方式构建
+  - [] 支持local类型
+  - [] 支持swift类型
+	- [] 缓存路径定制
+	- [] 打包脚本定制？
+	- [] Configuration定制？
+	- [] 多Target使用相同Pod但不同subspec相应缓存
 
 - 命令相关
-	[] 支持'pod update'命令工作
-	[] 支持'pod freeze'命令的查询、缓存操作
+	- [] 支持'pod update'命令工作
+	- [] 支持'pod freeze'命令的查询、缓存操作
 
 如果你喜欢这个插件，请留下🌟！欢迎提出遇到的问题，以及希望增加的功能！
