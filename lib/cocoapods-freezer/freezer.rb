@@ -6,11 +6,14 @@ module Pod
 			@shared ||= (Config.instance.podfile ? new(Config.instance.podfile) : nil)
 		end
 
+    attr_accessor :root
+
     def initialize(podfile)
       raise unless podfile
       @podfile = podfile
       @frozen_pods = [] 
       @enable = false
+      @root = Pathname.new(@podfile.defined_in_file.dirname) + 'FrozenPods'
     end
 
     def enable?
@@ -29,7 +32,7 @@ module Pod
     # todo(ca1md0wn): if Dir of FrozenPods destoryed, should fix by itself!
 		def freeze!
       @enable = true
-
+      Pod::UI.puts "Frozen Root: #{root}".green
       Pod::UI.puts "Freezing Pods".green
 
       unchange_spec_names = []
@@ -167,7 +170,7 @@ module Pod
       pod_names || []
     end
 
-    def freezed_pod?(pod_name)
+    def frozen_pod?(pod_name)
       @frozen_pods.each do |frozen_pod|
         if frozen_pod.pod_name == pod_name
           return true
@@ -204,10 +207,6 @@ module Pod
     
     # [Array<FrozenPod>]
     @frozen_pods
-
-		def root
-			Pathname.new(@podfile.defined_in_file.dirname) + 'FrozenPods'
-		end
 
     def manifest_path
       root + 'Manifest.lock'

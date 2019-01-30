@@ -21,7 +21,7 @@ module Pod
 
     def resolve_dependencies_about_freezed
       major_specs.each do |major_spec|
-        next unless Pod::Freezer.shared.freezed_pod?(major_spec.name)
+        next unless Pod::Freezer.shared.frozen_pod?(major_spec.name)
 
         targets = pod_targets.select do |target|
           target.pod_name == major_spec.name
@@ -46,7 +46,7 @@ module Pod
     end
 
     def install_source_of_pod_about_freezed(pod_name)
-      if Pod::Freezer.shared.freezed_pod?(pod_name)
+      if Pod::Freezer.shared.frozen_pod?(pod_name)
         Pod::Freezer.shared.export!(pod_name, self.sandbox.pod_dir(pod_name))
       end
     end

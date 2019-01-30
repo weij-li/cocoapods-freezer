@@ -1,13 +1,17 @@
 module Pod
 	class Command
     class Install < Command
-      require 'cocoapods-freezer/command/options/use_freezer'
-      include UseFreezer
+      require 'cocoapods-freezer/command/options/frozen'
+      include Frozen
 
       define_method(:run) do
       	verify_podfile_exists!
 
-        if use_freezer?
+        if frozen?
+          unless frozen_root.nil?
+            Freezer::shared.root = frozen_root
+          end
+
           Freezer::shared.freeze!
         elsif Config.instance.sandbox.manifest && Config.instance.sandbox.manifest.freered?
           Config.instance.sandbox.clear!
