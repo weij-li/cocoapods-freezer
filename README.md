@@ -15,7 +15,9 @@ $ gem install cocoapods-freezer
 ## Usage
 
 ``` shell
-$ pod install --user-freezer
+$ pod install --frozen
+
+$ pod install --frozen=/Users/ca1md0wn/FrozenPods
 
 ```
 

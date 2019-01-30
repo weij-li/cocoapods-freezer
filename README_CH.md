@@ -11,7 +11,7 @@ $ gem install cocoapods-freezer
 ## 使用
 	
 ``` shell
-$ pod install --user-freezer
+$ pod install --frozen
 
 ```
 
@@ -27,6 +27,7 @@ $ pod install --user-freezer
 [x] 目前仅支持单iOS平台
 [x] 支持增量打包
 [x] 支持缓存复用
+[x] 缓存路径定制
 
 ## 计划
 
@@ -35,7 +36,6 @@ $ pod install --user-freezer
   - [] 支持Framework(Dynamic\Static)方式构建
   - [] 支持local类型
   - [] 支持swift类型
-	- [] 缓存路径定制
 	- [] 打包脚本定制？
 	- [] Configuration定制？
 	- [] 多Target使用相同Pod但不同subspec相应缓存
