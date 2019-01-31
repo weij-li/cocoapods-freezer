@@ -21,13 +21,13 @@ $ pod install --frozen
 
 ## 能力
 
-[x] 基于Podfile进行Pods缓存分析，配合'Pod install'进行缓存
-[x] 目前仅支持static-library预打包处理（需屏蔽'use_framework!'）
-[x] 目前仅支持release打包配置
-[x] 目前仅支持单iOS平台
-[x] 支持增量打包
-[x] 支持缓存复用
-[x] 缓存路径定制
+- [x] 基于Podfile进行Pods缓存分析，配合'Pod install'进行缓存
+- [x] 目前仅支持static-library预打包处理（需屏蔽'use_framework!'）
+- [x] 目前仅支持release打包配置
+- [x] 目前仅支持单iOS平台
+- [x] 支持增量打包
+- [x] 支持缓存复用
+- [x] 缓存路径定制
 
 ## 计划
 
