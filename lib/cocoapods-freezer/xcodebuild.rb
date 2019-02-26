@@ -47,7 +47,7 @@ module Pod
 		def self.build!(project, sdk, arch, scheme)
 			begin
 	      output_path = Dir.randdir
-	      args = %W(-project #{project.to_s} -scheme #{scheme} -configuration Release CONFIGURATION_BUILD_DIR=#{output_path.to_s} -sdk #{sdk} -derivedDataPath #{Dir.randdir.to_s} -arch #{arch} clean build)
+	      args = %W(build -project #{project.to_s} -scheme #{scheme} -configuration Release CONFIGURATION_BUILD_DIR=#{output_path.to_s} -sdk #{sdk} -derivedDataPath #{Dir.randdir.to_s} -arch #{arch} -verbose)
 	      Pod::Executable.execute_command("xcodebuild", args, true)
 	      # Pod::UI.puts "#{scheme} #{sdk} #{arch} xcodebuild succeed!"
 	      return output_path
