@@ -9,7 +9,7 @@ module Pod
           def options
             [
               ['--frozen', 'running cocoapods-freezer before install'],
-              ['--frozen=~/Workspace', 'running cocoapods-freezer before install'],
+              ['--frozen=<Path>', 'running cocoapods-freezer before install'],
             ].concat(super)
           end
         end
@@ -40,7 +40,7 @@ module Pod
             if root.directory?
               @frozen_root = root
             else
-              root.mkdir
+              root.mkpath
               if root.directory?
                 @frozen_root = root
               end
