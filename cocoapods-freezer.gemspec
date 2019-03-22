@@ -6,11 +6,11 @@ require 'cocoapods-freezer/gem_version.rb'
 Gem::Specification.new do |spec|
   spec.name          = 'cocoapods-freezer'
   spec.version       = CocoapodsFreezer::VERSION
-  spec.authors       = ['ca1md0wn']
-  spec.email         = ['studio.ca1md0wn@gmail.com']
+  spec.authors       = ['vakeeeli']
+  spec.email         = ['vakeeeli@gmail.com']
   spec.description   = %q{cocoapods-freezer is a plugin of cocoapods. It uses for cache of intergation!}
   spec.summary       = %q{cocoapods-freezer is a plugin of cocoapods. It uses for cache of intergation!}
-  spec.homepage      = 'https://github.com/ca1md0wn/cocoapods-freezer'
+  spec.homepage      = 'https://github.com/vakeeeli/cocoapods-freezer'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files`.split($/)
